@@ -1,0 +1,127 @@
+/* RON playground — embedded-friendly, modern CSS, light/dark via prefers-color-scheme. */
+
+:root {
+  color-scheme: light dark;
+  --bg:      light-dark(oklch(99% 0.003 270), oklch(16% 0.012 275));
+  --surface: light-dark(oklch(97% 0.005 270), oklch(20% 0.016 275));
+  --surface-2: light-dark(oklch(93% 0.008 270), oklch(24% 0.018 275));
+  --text:    light-dark(oklch(28% 0.02 275),  oklch(93% 0.01 275));
+  --muted:   light-dark(oklch(48% 0.02 275),  oklch(67% 0.02 275));
+  --border:  light-dark(oklch(90% 0.01 275),  oklch(30% 0.02 275));
+  --accent:  light-dark(oklch(52% 0.2 285),   oklch(74% 0.16 285));
+  --accent-ink: light-dark(oklch(99% 0.01 285), oklch(16% 0.03 285));
+  --good:    light-dark(oklch(50% 0.15 152),  oklch(80% 0.15 155));
+  --bad:     light-dark(oklch(52% 0.2 25),    oklch(78% 0.16 25));
+  /* Syntax-highlight token colours (tempest/highlight hl-* classes). */
+  --hl-key:   light-dark(oklch(48% 0.16 264), oklch(80% 0.12 264)); /* keys */
+  --hl-str:   light-dark(oklch(46% 0.13 152), oklch(82% 0.13 155)); /* string values */
+  --hl-num:   light-dark(oklch(52% 0.15 62),  oklch(84% 0.13 75));  /* numbers */
+  --hl-lit:   light-dark(oklch(52% 0.19 312), oklch(82% 0.15 312)); /* true/false/null */
+  --hl-punct: light-dark(oklch(58% 0.02 275), oklch(60% 0.02 275)); /* { } [ ] */
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.pg {
+  container-type: inline-size;
+  max-width: 1100px;
+  margin-inline: auto;
+  padding: clamp(.75rem, 2vw, 1.25rem);
+  display: flex;
+  flex-direction: column;
+  gap: .9rem;
+}
+
+/* ── Top bar ── */
+.pg-top {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1rem;
+  justify-content: space-between;
+}
+.pg-top h1 { margin: 0; font-size: 1.05rem; font-weight: 600; letter-spacing: -0.01em; }
+.pg-logo { font-family: var(--mono); font-weight: 700; }
+.pg-logo b { color: var(--accent); }
+
+.pg-controls { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+
+.pg-modes { display: inline-flex; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }
+.pg-mode {
+  font: inherit; font-size: .85rem; cursor: pointer;
+  border: 0; background: var(--surface); color: var(--muted);
+  padding: .4rem .8rem; transition: background .15s, color .15s;
+}
+.pg-mode + .pg-mode { border-left: 1px solid var(--border); }
+.pg-mode:hover { color: var(--text); }
+.pg-mode.is-active { background: var(--accent); color: var(--accent-ink); }
+
+.pg-pretty { display: inline-flex; align-items: center; gap: .4rem; font-size: .85rem; color: var(--muted); cursor: pointer; }
+.pg-pretty input { accent-color: var(--accent); }
+
+/* ── Two-pane grid (stacks on narrow containers) ── */
+.pg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+@container (max-width: 620px) { .pg-grid { grid-template-columns: 1fr; } }
+
+.pg-pane { display: flex; flex-direction: column; min-width: 0; }
+.pg-pane-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: .5rem;
+  margin-bottom: .4rem; min-height: 1.4rem;
+}
+.pg-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+.pg-badge {
+  font-size: .72rem; font-weight: 600; color: var(--good);
+  border: 1px solid color-mix(in oklch, var(--good) 45%, var(--border));
+  border-radius: 100px; padding: .1rem .5rem;
+}
+
+.pg-input, .pg-output {
+  font-family: var(--mono); font-size: .85rem; line-height: 1.55;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: .85rem .95rem; margin: 0;
+  min-height: 320px;
+}
+.pg-input {
+  width: 100%; resize: vertical; color: var(--text);
+  tab-size: 2;
+}
+.pg-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+
+.pg-output {
+  white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere;
+  view-transition-name: pg-output;
+}
+.pg-output.is-error { color: var(--bad); border-color: color-mix(in oklch, var(--bad) 40%, var(--border)); }
+.pg-output.is-muted { color: var(--muted); }
+
+/* Syntax-highlight tokens in the output pane (server-rendered by tempest/highlight). */
+.pg-output .hl-keyword  { color: var(--hl-key); }
+.pg-output .hl-value    { color: var(--hl-str); }
+.pg-output .hl-number   { color: var(--hl-num); }
+.pg-output .hl-literal  { color: var(--hl-lit); font-weight: 600; }
+.pg-output .hl-property,
+.pg-output .hl-operator { color: var(--hl-punct); }
+
+.pg-out { display: flex; flex-direction: column; }
+
+/* ── Stats ── */
+.pg-stats {
+  display: flex; flex-wrap: wrap; gap: .35rem 1.1rem; margin: .5rem 0 0;
+  font-size: .73rem; color: var(--muted);
+}
+.pg-stats div { display: flex; gap: .4rem; align-items: baseline; }
+.pg-stats dt { text-transform: uppercase; letter-spacing: .05em; opacity: .8; }
+.pg-stats dd { margin: 0; }
+.pg-stats code { font-family: var(--mono); color: var(--text); }
+
+/* ── Footer ── */
+.pg-foot { font-size: .78rem; color: var(--muted); text-align: center; padding-top: .25rem; }
+.pg-foot a { color: var(--accent); text-decoration: none; }
+.pg-foot a:hover { text-decoration: underline; }

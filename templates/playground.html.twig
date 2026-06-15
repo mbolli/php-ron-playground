@@ -1,0 +1,69 @@
+<div class="pg">
+    <header class="pg-top">
+        <h1><span class="pg-logo">php<b>-ron</b></span> playground</h1>
+        <div class="pg-controls">
+            <div class="pg-modes" role="group" aria-label="Direction">
+                {# Switching direction moves the current output into the input (panes swap),
+                   then re-converts. Guarded so clicking the active direction is a no-op. #}
+                <button type="button" class="pg-mode"
+                        data-class="{'is-active': ${{ modeSignalId }} === 'json2ron'}"
+                        data-on:click="${{ modeSignalId }} === 'json2ron' ? null : (${{ input.id }} = document.getElementById('pg-code')?.textContent ?? ${{ input.id }}, ${{ modeSignalId }} = 'json2ron', @post('{{ convert.url }}'))">JSON &rarr; RON</button>
+                <button type="button" class="pg-mode"
+                        data-class="{'is-active': ${{ modeSignalId }} === 'ron2json'}"
+                        data-on:click="${{ modeSignalId }} === 'ron2json' ? null : (${{ input.id }} = document.getElementById('pg-code')?.textContent ?? ${{ input.id }}, ${{ modeSignalId }} = 'ron2json', @post('{{ convert.url }}'))">RON &rarr; JSON</button>
+            </div>
+            <label class="pg-pretty">
+                <input type="checkbox" data-bind="{{ pretty.id }}" data-on:change="@post('{{ convert.url }}')">
+                Pretty
+            </label>
+        </div>
+    </header>
+
+    <div class="pg-grid">
+        <section class="pg-pane">
+            <div class="pg-pane-head">
+                <span class="pg-label" data-text="${{ modeSignalId }} === 'json2ron' ? 'JSON input' : 'RON input'">Input</span>
+            </div>
+            <textarea class="pg-input" spellcheck="false" autocomplete="off" autocapitalize="off"
+                      aria-label="Source to convert"
+                      data-bind="{{ input.id }}"
+                      data-on:input__debounce.250ms="@post('{{ convert.url }}')">{{ input.string }}</textarea>
+        </section>
+
+        <section class="pg-pane">
+            {% block output %}
+            <div id="pg-out" class="pg-out">
+                <div class="pg-pane-head">
+                    <span class="pg-label">{{ toRon ? 'RON output' : 'JSON output' }}</span>
+                    {% if toRon and savedPct is not null and not error %}
+                        <span class="pg-badge" title="Canonical RON vs canonical JSON">{{ savedPct }}% smaller</span>
+                    {% endif %}
+                </div>
+
+                {% if error %}
+                    <pre class="pg-output is-error">{{ error }}</pre>
+                {% elseif output == '' %}
+                    <pre class="pg-output is-muted">Start typing on the left…</pre>
+                {% else %}
+                    <pre id="pg-code" class="pg-output">{{ outputHtml|raw }}</pre>
+                {% endif %}
+
+                {% if not error and hash %}
+                    <dl class="pg-stats">
+                        {% if compactJsonBytes and compactRonBytes %}
+                            <div><dt>canonical</dt><dd>{{ compactJsonBytes }} B JSON &middot; {{ compactRonBytes }} B RON</dd></div>
+                        {% endif %}
+                        <div><dt>xxh3-128</dt><dd><code>{{ hash }}</code></dd></div>
+                    </dl>
+                {% endif %}
+            </div>
+            {% endblock %}
+        </section>
+    </div>
+
+    <footer class="pg-foot">
+        Lossless JSON &harr; RON. Powered by
+        <a href="https://github.com/mbolli/php-ron" target="_blank" rel="noopener">php-ron</a> +
+        <a href="https://via.zweiundeins.gmbh" target="_blank" rel="noopener">php-via</a>.
+    </footer>
+</div>

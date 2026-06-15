@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>RON playground</title>
+
+    <!-- php-via connection machinery (do not remove): seeds via_ctx, opens the
+         single SSE stream, and closes the context on unload. -->
+    <meta data-signals='{{ signals_json }}'>
+    <meta data-indicator="_connecting"
+        data-on-interval__duration.15s.leading="!$_connecting && @get('{{ base_path }}_sse')"
+        data-on-datastar-fetch="el === evt.detail.el &&
+                           ((evt.detail.type.startsWith('datastar') && ($_disconnected = false)) ||
+                           (['retrying', 'error', 'finished'].includes(evt.detail.type) && ($_disconnected = true)))">
+    <meta data-init="window.addEventListener('beforeunload', () => { navigator.sendBeacon('{{ base_path }}_session/close', '{{ context_id }}'); });">
+
+    <link rel="stylesheet" href="{{ base_path }}playground.css">
+    <style>{{ styles }}</style>
+    {{ head_content }}
+</head>
+<body>
+    {{ content }}
+    {{ foot_content }}
+
+    <!-- Height handshake: report content height to the embedding marketing page so
+         the cross-origin iframe can size itself. The parent validates event.origin;
+         we only ever send a number, so '*' targeting leaks nothing sensitive. -->
+    <script>
+    (function () {
+        var last = 0;
+        function post() {
+            var h = Math.ceil(document.documentElement.getBoundingClientRect().height);
+            if (h && Math.abs(h - last) > 1) {
+                last = h;
+                parent.postMessage({ type: 'ron-playground:height', height: h }, '*');
+            }
+        }
+        if (window.ResizeObserver) { new ResizeObserver(post).observe(document.documentElement); }
+        window.addEventListener('load', post);
+        window.addEventListener('resize', post);
+        setTimeout(post, 50);
+    })();
+    </script>
+
+    <script type="module" src="{{ base_path }}datastar.js"></script>
+</body>
+</html>
