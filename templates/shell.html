@@ -29,12 +29,15 @@
          we only ever send a number, so '*' targeting leaks nothing sensitive. -->
     <script>
     (function () {
+        // Pad the reported height by a few px so sub-pixel rounding in the parent never
+        // clips the content or flashes a scrollbar; better slightly tall than slightly short.
+        var PAD = 3;
         var last = 0;
         function post() {
             var h = Math.ceil(document.documentElement.getBoundingClientRect().height);
             if (h && Math.abs(h - last) > 1) {
                 last = h;
-                parent.postMessage({ type: 'ron-playground:height', height: h }, '*');
+                parent.postMessage({ type: 'ron-playground:height', height: h + PAD }, '*');
             }
         }
         if (window.ResizeObserver) { new ResizeObserver(post).observe(document.documentElement); }
