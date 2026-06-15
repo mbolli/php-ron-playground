@@ -1,0 +1,32 @@
+{
+    "name": "mbolli/php-ron-playground",
+    "description": "Live RON playground: a php-via app that converts JSON <-> RON on keypress over a single SSE connection.",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "ext-openswoole": "*",
+        "mbolli/php-via": "dev-master",
+        "mbolli/php-ron": "^0.1.1",
+        "tempest/highlight": "^2.17",
+        "mbolli/tempest-highlight-ron": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "RonPlayground\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "post-install-cmd": "@php bin/copy-assets.php",
+        "post-update-cmd": "@php bin/copy-assets.php",
+        "start": "@php app.php"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
+    }
+}

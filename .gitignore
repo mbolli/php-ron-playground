@@ -1,0 +1,9 @@
+/vendor/
+
+# Copied from the php-via package on composer install (see bin/copy-assets.php)
+/public/datastar.js
+/public/via.css
+
+# Runtime
+.env
+*.log
