@@ -1,0 +1,34 @@
+# RON playground - play-ron.zweiundeins.gmbh
+#
+# Drop this in /etc/caddy/ on a host whose main Caddyfile does `import ./*.caddyfile`.
+# It terminates TLS and reverse-proxies via h2c to the OpenSwoole app (which does its
+# own Brotli). frame-ancestors is set HERE (not via the app's VIA_EMBED_ORIGIN) so the
+# app and Caddy don't both emit a Content-Security-Policy header.
+play-ron.zweiundeins.gmbh {
+	# SSE streams benefit from compression; the app does its own Brotli, gzip is the fallback.
+	encode {
+		gzip 6
+	}
+
+	reverse_proxy 127.0.0.1:3001 {
+		transport http {
+			versions h2c
+			read_timeout 0s
+			write_timeout 0s
+			dial_timeout 3s
+		}
+	}
+
+	# frame-ancestors lets the php-ron marketing page iframe us (NOT X-Frame-Options DENY).
+	header {
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+		Content-Security-Policy "frame-ancestors 'self' https://zweiundeins.gmbh https://mbolli.github.io http://localhost https://localhost"
+		Cross-Origin-Resource-Policy "cross-origin"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+
+	# Uses the (logging) snippet from the main Caddyfile -> /var/log/caddy/play-ron.log.
+	# That file must be owned caddy:caddy or Caddy can't open it (reload fails).
+	import logging play-ron
+}

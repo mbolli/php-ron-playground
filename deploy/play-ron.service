@@ -1,0 +1,30 @@
+[Unit]
+Description=RON Playground (play-ron.zweiundeins.gmbh)
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/php-ron-playground
+Environment="XDEBUG_MODE=off"
+Environment="APP_ENV=prod"
+Environment="VIA_PORT=3001"
+Environment="VIA_PUBLIC_ORIGIN=https://play-ron.zweiundeins.gmbh"
+ExecStart=/usr/bin/php /opt/php-ron-playground/app.php
+Restart=always
+RestartSec=10
+StandardOutput=null
+StandardError=journal
+SyslogIdentifier=play-ron
+
+# Hardening. PrivateTmp gives the service a private writable /tmp, where the app's
+# Twig cache lives (sys_get_temp_dir()/ron-playground-twig), so ProtectSystem=strict is fine.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/php-ron-playground
+
+[Install]
+WantedBy=multi-user.target

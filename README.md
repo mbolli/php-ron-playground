@@ -45,10 +45,36 @@ repository for them in `composer.json`.
 
 ## Deploy
 
-The runtime is the OpenSwoole process (`php app.php`) behind a TLS-terminating reverse proxy that
-speaks h2c to it; in prod the app sets `APP_ENV=prod` (secure + embeddable cookie, h2c, Brotli) and
-emits `frame-ancestors` from `VIA_EMBED_ORIGIN`. Per-IP action rate limiting (180/min) is on by
-default. The concrete deployment setup (container image, proxy config) will be added later.
+The runtime is the OpenSwoole process (`php app.php`) run by systemd, behind Caddy which terminates
+TLS and reverse-proxies to it via h2c. In prod (`APP_ENV=prod`) the app speaks h2c, compresses with
+Brotli, and marks the session cookie `Secure` + embeddable. Per-IP action rate limiting (180/min) is
+on by default.
+
+The live instance runs at `https://play-ron.zweiundeins.gmbh`. The two unit/proxy files are in
+[`deploy/`](deploy/):
+
+- [`deploy/play-ron.service`](deploy/play-ron.service) → `/etc/systemd/system/`. Runs as `www-data`
+  with `APP_ENV=prod`, `VIA_PORT=3001`, `VIA_PUBLIC_ORIGIN=https://play-ron.zweiundeins.gmbh`.
+- [`deploy/play-ron.caddyfile`](deploy/play-ron.caddyfile) → `/etc/caddy/` (a host whose main
+  Caddyfile does `import ./*.caddyfile`). Proxies `127.0.0.1:3001` over h2c and sets the
+  `frame-ancestors` / HSTS headers.
+
+```bash
+# on the server, as root
+git clone https://github.com/mbolli/php-ron-playground /opt/php-ron-playground
+cd /opt/php-ron-playground
+php /opt/composer.phar install --no-dev --optimize-autoloader   # runs copy-assets (datastar.js)
+chown -R www-data:www-data /opt/php-ron-playground
+
+cp deploy/play-ron.service /etc/systemd/system/
+systemctl daemon-reload && systemctl enable --now play-ron      # OpenSwoole on :3001
+
+cp deploy/play-ron.caddyfile /etc/caddy/
+touch /var/log/caddy/play-ron.log && chown caddy:caddy /var/log/caddy/play-ron.log  # else reload fails
+systemctl reload caddy
+```
+
+Update an existing deploy with `git pull && php /opt/composer.phar install --no-dev && systemctl restart play-ron`.
 
 ## Embedding in the marketing one-pager
 
@@ -57,8 +83,11 @@ default. The concrete deployment setup (container image, proxy config) will be a
    `data-playground-src="https://<your-playground-origin>/"` on the `#playground` div. The page
    reveals the iframe only once its height-handshake confirms it loaded, and stays on the static
    comparison otherwise.
-3. Set `VIA_EMBED_ORIGIN` to the marketing page origin (e.g. `https://mbolli.github.io`) so the
-   playground emits a matching `frame-ancestors`, and `VIA_PUBLIC_ORIGIN` to this service's origin.
+3. Allow the marketing page origin in `frame-ancestors`. In this deploy that lives in
+   [`deploy/play-ron.caddyfile`](deploy/play-ron.caddyfile) (already includes `https://mbolli.github.io`
+   and `https://zweiundeins.gmbh`); alternatively the app can emit it via `VIA_EMBED_ORIGIN`, but set
+   it in only one place to avoid two `Content-Security-Policy` headers. `VIA_PUBLIC_ORIGIN` stays this
+   service's own origin.
 
 ### Cross-site cookies when embedding
 
