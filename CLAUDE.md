@@ -44,7 +44,7 @@ per-tab state in-process — no manual SSE plumbing, no Redis.
 
 - `app.php` — bootstrap, `Config`, the single `/` page: declares signals, the `convert` action, and
   the callable view. Signals are **TAB-scoped** (each visitor's editor is private to their tab).
-- `src/Converter.php` — framework-free JSON ⇄ RON conversion + stats (bytes saved, XXH3-128 hash).
+- `src/Converter.php` — framework-free JSON ⇄ RON conversion + stats (bytes saved, SHA-256 hash).
   Depends only on `mbolli/php-ron` so it's testable in isolation. Caps input at `MAX_BYTES` (64 KB)
   and turns any thrown `RonException`/`Throwable` into a short `error` string. Stats/hash are
   best-effort and must never hide a successful conversion.

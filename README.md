@@ -17,7 +17,7 @@ converted RON/JSON, patched down the existing SSE stream. Read stream + command 
 OpenSwoole holding state in-process — no manual SSE plumbing or Redis.
 
 - `app.php` — bootstrap + the single page (signals `input`/`mode`/`pretty`, the `convert` action, the callable view).
-- `src/Converter.php` — framework-free JSON ⇄ RON conversion + stats (bytes saved, XXH3-128 hash). Caps input at 64 KB and catches `RonException`.
+- `src/Converter.php` — framework-free JSON ⇄ RON conversion + stats (bytes saved, SHA-256 hash). Caps input at 64 KB and catches `RonException`.
 - `templates/shell.html` — custom php-via shell: the connection metas, the embedded layout, and the iframe **height-handshake** script.
 - `templates/playground.html.twig` — the UI; the `{% block output %}` is what re-renders live.
 - `public/playground.css` — standalone styling (modern CSS, light/dark via `prefers-color-scheme`).

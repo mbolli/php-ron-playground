@@ -53,7 +53,7 @@
                         {% if compactJsonBytes and compactRonBytes %}
                             <div><dt>canonical</dt><dd>{{ compactJsonBytes }} B JSON &middot; {{ compactRonBytes }} B RON</dd></div>
                         {% endif %}
-                        <div><dt>xxh3-128</dt><dd><code>{{ hash }}</code></dd></div>
+                        <div><dt>sha-256</dt><dd><code>{{ hash }}</code></dd></div>
                     </dl>
                 {% endif %}
             </div>
