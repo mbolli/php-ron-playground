@@ -19,10 +19,10 @@ Requires **PHP 8.4+** with the **OpenSwoole** extension. There is no test suite,
 analysis configured in this repo — do not invent `phpunit`/`phpstan` commands (the entries you may
 see in `composer.lock` belong to the php-via dependency, not this project).
 
-All dependencies resolve from Packagist; `mbolli/php-via` tracks `dev-master` (hence
-`minimum-stability: dev`). To develop against local checkouts of the libraries, add a `path`
-repository for them in `composer.json`. `OutputHighlighter`/`Highlighter` are long-lived because the
-OpenSwoole process is long-running — restart `php app.php` to pick up code changes.
+All dependencies resolve from Packagist as stable releases (`mbolli/php-via` is pinned to `^0.10.0`).
+To develop against local checkouts of the libraries, add a `path` repository for them in
+`composer.json`. `OutputHighlighter`/`Highlighter` are long-lived because the OpenSwoole process is
+long-running — restart `php app.php` to pick up code changes.
 
 ## Architecture (CQRS over one SSE stream)
 

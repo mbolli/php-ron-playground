@@ -31,8 +31,8 @@ php app.php           # → http://localhost:3000
 ```
 
 Requires PHP 8.4+ with the OpenSwoole extension (same as php-via). All dependencies resolve from
-Packagist; `mbolli/php-via` tracks `dev-master` for now (hence `minimum-stability: dev`). To develop
-against local checkouts of the libraries, add a `path` repository for them in `composer.json`.
+Packagist as stable releases. To develop against local checkouts of the libraries, add a `path`
+repository for them in `composer.json`.
 
 ## Configuration (env)
 
