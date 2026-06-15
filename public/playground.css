@@ -117,8 +117,8 @@ body {
   font-size: .73rem; color: var(--muted);
 }
 .pg-stats div { display: flex; gap: .4rem; align-items: baseline; }
-.pg-stats dt { text-transform: uppercase; letter-spacing: .05em; opacity: .8; }
-.pg-stats dd { margin: 0; }
+.pg-stats dt { width: 12ch; text-transform: uppercase; letter-spacing: .05em; opacity: .8; }
+.pg-stats dd { width: 33ch; margin: 0; word-break: break-word; }
 .pg-stats code { font-family: var(--mono); color: var(--text); }
 
 /* ── Footer ── */
