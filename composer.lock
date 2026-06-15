@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "26fb1ddbf73badc5d13ef0b5497cb97d",
+    "content-hash": "a2207e4d0f808a550b199e4fb3f6e3d1",
     "packages": [
         {
             "name": "mbolli/php-ron",
@@ -54,16 +54,16 @@
         },
         {
             "name": "mbolli/php-via",
-            "version": "dev-master",
+            "version": "v0.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mbolli/php-via.git",
-                "reference": "59a63b6670f7733a57490c5961b661fff33439dc"
+                "reference": "99aaae094d87ebe04b9dfed554a3578d457d1850"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mbolli/php-via/zipball/59a63b6670f7733a57490c5961b661fff33439dc",
-                "reference": "59a63b6670f7733a57490c5961b661fff33439dc",
+                "url": "https://api.github.com/repos/mbolli/php-via/zipball/99aaae094d87ebe04b9dfed554a3578d457d1850",
+                "reference": "99aaae094d87ebe04b9dfed554a3578d457d1850",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +88,6 @@
             "suggest": {
                 "ext-brotli": "Required for Config::withBrotli(): Native Brotli compression for pages, static assets, and SSE streams"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -108,26 +107,26 @@
             "description": "Real-time engine for building reactive web applications in PHP",
             "support": {
                 "issues": "https://github.com/mbolli/php-via/issues",
-                "source": "https://github.com/mbolli/php-via/tree/v0.9.0"
+                "source": "https://github.com/mbolli/php-via/tree/v0.10.0"
             },
-            "time": "2026-05-12T21:10:04+00:00"
+            "time": "2026-06-15T10:44:13+00:00"
         },
         {
             "name": "mbolli/tempest-highlight-ron",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mbolli/tempest-highlight-ron.git",
-                "reference": "41a92d0351fd88c13aa6b52bf2c2d32dad0dffb9"
+                "reference": "be185f6df0336d5efd574500b397d4818705ee38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mbolli/tempest-highlight-ron/zipball/41a92d0351fd88c13aa6b52bf2c2d32dad0dffb9",
-                "reference": "41a92d0351fd88c13aa6b52bf2c2d32dad0dffb9",
+                "url": "https://api.github.com/repos/mbolli/tempest-highlight-ron/zipball/be185f6df0336d5efd574500b397d4818705ee38",
+                "reference": "be185f6df0336d5efd574500b397d4818705ee38",
                 "shasum": ""
             },
             "require": {
-                "mbolli/php-ron": "^0.1",
+                "mbolli/php-ron": "^0.1.1",
                 "php": "^8.4",
                 "tempest/highlight": "^2.17"
             },
@@ -161,9 +160,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mbolli/tempest-highlight-ron/issues",
-                "source": "https://github.com/mbolli/tempest-highlight-ron/tree/v1.0.0"
+                "source": "https://github.com/mbolli/tempest-highlight-ron/tree/v1.0.1"
             },
-            "time": "2026-06-15T10:47:34+00:00"
+            "time": "2026-06-15T11:17:36+00:00"
         },
         {
             "name": "nyholm/psr7",
@@ -963,10 +962,8 @@
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "dev",
-    "stability-flags": {
-        "mbolli/php-via": 20
-    },
+    "minimum-stability": "stable",
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
