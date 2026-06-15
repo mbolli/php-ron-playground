@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a2207e4d0f808a550b199e4fb3f6e3d1",
+    "content-hash": "2477b92911e8d36409b8abdaf469f84b",
     "packages": [
         {
             "name": "mbolli/php-ron",
-            "version": "v0.1.1",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mbolli/php-ron.git",
-                "reference": "ee62e218de2352f0dac8edfbd65de570da4aadeb"
+                "reference": "5e065aa0a8f7c15a6aeaa85e524faadedc6aed79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mbolli/php-ron/zipball/ee62e218de2352f0dac8edfbd65de570da4aadeb",
-                "reference": "ee62e218de2352f0dac8edfbd65de570da4aadeb",
+                "url": "https://api.github.com/repos/mbolli/php-ron/zipball/5e065aa0a8f7c15a6aeaa85e524faadedc6aed79",
+                "reference": "5e065aa0a8f7c15a6aeaa85e524faadedc6aed79",
                 "shasum": ""
             },
             "require": {
@@ -48,22 +48,22 @@
             "description": "Performance-focused PHP implementation of RON (Readable Object Notation)",
             "support": {
                 "issues": "https://github.com/mbolli/php-ron/issues",
-                "source": "https://github.com/mbolli/php-ron/tree/v0.1.1"
+                "source": "https://github.com/mbolli/php-ron/tree/v0.3.0"
             },
-            "time": "2026-06-15T10:23:54+00:00"
+            "time": "2026-06-15T18:38:29+00:00"
         },
         {
             "name": "mbolli/php-via",
-            "version": "v0.10.0",
+            "version": "v0.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mbolli/php-via.git",
-                "reference": "99aaae094d87ebe04b9dfed554a3578d457d1850"
+                "reference": "9c0502508a75819b3a03be3489a4fa6cec9e9711"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mbolli/php-via/zipball/99aaae094d87ebe04b9dfed554a3578d457d1850",
-                "reference": "99aaae094d87ebe04b9dfed554a3578d457d1850",
+                "url": "https://api.github.com/repos/mbolli/php-via/zipball/9c0502508a75819b3a03be3489a4fa6cec9e9711",
+                "reference": "9c0502508a75819b3a03be3489a4fa6cec9e9711",
                 "shasum": ""
             },
             "require": {
@@ -107,26 +107,26 @@
             "description": "Real-time engine for building reactive web applications in PHP",
             "support": {
                 "issues": "https://github.com/mbolli/php-via/issues",
-                "source": "https://github.com/mbolli/php-via/tree/v0.10.0"
+                "source": "https://github.com/mbolli/php-via/tree/v0.10.1"
             },
-            "time": "2026-06-15T10:44:13+00:00"
+            "time": "2026-06-15T11:24:23+00:00"
         },
         {
             "name": "mbolli/tempest-highlight-ron",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mbolli/tempest-highlight-ron.git",
-                "reference": "be185f6df0336d5efd574500b397d4818705ee38"
+                "reference": "4ee7e56145ee44fa5b956a4869b6daf91bfa55ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mbolli/tempest-highlight-ron/zipball/be185f6df0336d5efd574500b397d4818705ee38",
-                "reference": "be185f6df0336d5efd574500b397d4818705ee38",
+                "url": "https://api.github.com/repos/mbolli/tempest-highlight-ron/zipball/4ee7e56145ee44fa5b956a4869b6daf91bfa55ba",
+                "reference": "4ee7e56145ee44fa5b956a4869b6daf91bfa55ba",
                 "shasum": ""
             },
             "require": {
-                "mbolli/php-ron": "^0.1.1",
+                "mbolli/php-ron": "^0.3.0",
                 "php": "^8.4",
                 "tempest/highlight": "^2.17"
             },
@@ -160,9 +160,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mbolli/tempest-highlight-ron/issues",
-                "source": "https://github.com/mbolli/tempest-highlight-ron/tree/v1.0.1"
+                "source": "https://github.com/mbolli/tempest-highlight-ron/tree/v1.0.2"
             },
-            "time": "2026-06-15T11:17:36+00:00"
+            "time": "2026-06-15T19:09:56+00:00"
         },
         {
             "name": "nyholm/psr7",
@@ -971,5 +971,5 @@
         "ext-openswoole": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }

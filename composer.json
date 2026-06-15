@@ -6,10 +6,10 @@
     "require": {
         "php": "^8.4",
         "ext-openswoole": "*",
-        "mbolli/php-via": "^0.10.0",
-        "mbolli/php-ron": "^0.1.1",
+        "mbolli/php-via": "^0.10.1",
+        "mbolli/php-ron": "^0.3.0",
         "tempest/highlight": "^2.17",
-        "mbolli/tempest-highlight-ron": "^1.0"
+        "mbolli/tempest-highlight-ron": "^1.0.2"
     },
     "autoload": {
         "psr-4": {
