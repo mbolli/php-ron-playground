@@ -48,6 +48,10 @@ per-tab state in-process — no manual SSE plumbing, no Redis.
   Depends only on `mbolli/php-ron` so it's testable in isolation. Caps input at `MAX_BYTES` (64 KB)
   and turns any thrown `RonException`/`Throwable` into a short `error` string. Stats/hash are
   best-effort and must never hide a successful conversion.
+  The `pretty` signal maps to `RonMode::Pretty` / `RonMode::Compact` (php-ron >= 0.5). Both
+  **preserve the source member order**, so the output mirrors what the user typed; the third mode,
+  `RonMode::Canonical`, is what sorts keys, and it is used only for the stats/hash pass via
+  `Ron::canonicalJson()` / `Ron::canonicalRon()` / `Ron::canonicalHash()`.
 - `src/OutputHighlighter.php` — server-side syntax highlighting via `tempest/highlight` (RON support
   from `mbolli/tempest-highlight-ron`). `parse()` returns HTML-escaped token spans, safe to emit with
   Twig `|raw`.

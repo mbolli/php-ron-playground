@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RonPlayground;
 
 use Mbolli\Ron\Ron;
+use Mbolli\Ron\RonMode;
 
 /**
  * Pure JSON <-> RON conversion + stats for the playground.
@@ -29,9 +30,9 @@ final class Converter {
         JSON;
 
     /**
-     * @param string $src     the source text (JSON or RON depending on $mode)
-     * @param string $mode    'json2ron' (default) or 'ron2json'
-     * @param bool   $pretty  multiline output when true
+     * @param string $src    the source text (JSON or RON depending on $mode)
+     * @param string $mode   'json2ron' (default) or 'ron2json'
+     * @param bool   $pretty multiline output when true, single-line when false
      *
      * @return array{
      *     output: string, error: ?string, mode: string, toRon: bool,
@@ -53,13 +54,17 @@ final class Converter {
             return $empty;
         }
 
+        // Pretty and compact both preserve the source member order, so what the user
+        // typed is what comes back; only RonMode::Canonical sorts (and validates).
+        $outputMode = $pretty ? RonMode::Pretty : RonMode::Compact;
+
         // The conversion itself: any malformed input throws RonException (caught here).
         try {
             if ($mode === 'ron2json') {
-                $output = Ron::toJson($trimmed, pretty: $pretty);
-                $json = Ron::toJson($trimmed); // compact, valid JSON for the stats pass
+                $output = Ron::toJson($trimmed, $outputMode);
+                $json = Ron::toJson($trimmed, RonMode::Compact); // valid JSON for the stats pass
             } else {
-                $output = Ron::fromJson($trimmed, pretty: $pretty);
+                $output = Ron::fromJson($trimmed, $outputMode);
                 $json = $trimmed;
             }
         } catch (\Throwable $e) {
