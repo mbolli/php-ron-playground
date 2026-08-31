@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5b3ac9454e8e3272c805be98258886c",
+    "content-hash": "897cedc4ffbe34dbcc091244b2ba7952",
     "packages": [
         {
             "name": "mbolli/php-ron",
@@ -54,16 +54,16 @@
         },
         {
             "name": "mbolli/php-via",
-            "version": "v0.10.1",
+            "version": "v0.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mbolli/php-via.git",
-                "reference": "9c0502508a75819b3a03be3489a4fa6cec9e9711"
+                "reference": "1def23262edf01d5627ecb50a5a4ac5e3f96906e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mbolli/php-via/zipball/9c0502508a75819b3a03be3489a4fa6cec9e9711",
-                "reference": "9c0502508a75819b3a03be3489a4fa6cec9e9711",
+                "url": "https://api.github.com/repos/mbolli/php-via/zipball/1def23262edf01d5627ecb50a5a4ac5e3f96906e",
+                "reference": "1def23262edf01d5627ecb50a5a4ac5e3f96906e",
                 "shasum": ""
             },
             "require": {
@@ -107,9 +107,9 @@
             "description": "Real-time engine for building reactive web applications in PHP",
             "support": {
                 "issues": "https://github.com/mbolli/php-via/issues",
-                "source": "https://github.com/mbolli/php-via/tree/v0.10.1"
+                "source": "https://github.com/mbolli/php-via/tree/v0.12.0"
             },
-            "time": "2026-06-15T11:24:23+00:00"
+            "time": "2026-07-08T11:17:09+00:00"
         },
         {
             "name": "mbolli/tempest-highlight-ron",
@@ -583,16 +583,16 @@
         },
         {
             "name": "symfony/deprecation-contracts",
-            "version": "v3.7.0",
+            "version": "v3.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/deprecation-contracts.git",
-                "reference": "50f59d1f3ca46d41ac911f97a78626b6756af35b"
+                "reference": "f3202fa1b5097b0af062dc978b32ecf63404e31d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/50f59d1f3ca46d41ac911f97a78626b6756af35b",
-                "reference": "50f59d1f3ca46d41ac911f97a78626b6756af35b",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/f3202fa1b5097b0af062dc978b32ecf63404e31d",
+                "reference": "f3202fa1b5097b0af062dc978b32ecf63404e31d",
                 "shasum": ""
             },
             "require": {
@@ -630,7 +630,7 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.7.0"
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.7.1"
             },
             "funding": [
                 {
@@ -650,7 +650,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-13T15:52:40+00:00"
+            "time": "2026-06-05T06:23:12+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -822,16 +822,16 @@
         },
         {
             "name": "tempest/highlight",
-            "version": "2.26.0",
+            "version": "2.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tempestphp/highlight.git",
-                "reference": "ad74f092a3d0cbee73f4a007d685cac46c8b0c46"
+                "reference": "aa53fcf1c6775f2d422ed953684d41a15370e1f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tempestphp/highlight/zipball/ad74f092a3d0cbee73f4a007d685cac46c8b0c46",
-                "reference": "ad74f092a3d0cbee73f4a007d685cac46c8b0c46",
+                "url": "https://api.github.com/repos/tempestphp/highlight/zipball/aa53fcf1c6775f2d422ed953684d41a15370e1f9",
+                "reference": "aa53fcf1c6775f2d422ed953684d41a15370e1f9",
                 "shasum": ""
             },
             "require": {
@@ -869,7 +869,7 @@
             "description": "Fast, extensible, server-side code highlighting",
             "support": {
                 "issues": "https://github.com/tempestphp/highlight/issues",
-                "source": "https://github.com/tempestphp/highlight/tree/2.26.0"
+                "source": "https://github.com/tempestphp/highlight/tree/2.28.0"
             },
             "funding": [
                 {
@@ -877,20 +877,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-06-07T06:40:56+00:00"
+            "time": "2026-08-28T08:32:31+00:00"
         },
         {
             "name": "twig/twig",
-            "version": "v3.27.1",
+            "version": "v3.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "ae2071bffb38f04847fc0864d730c94b9cb8ab74"
+                "reference": "597c12ed286fb9d1701a36684ce6e0cbe28ebc8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/ae2071bffb38f04847fc0864d730c94b9cb8ab74",
-                "reference": "ae2071bffb38f04847fc0864d730c94b9cb8ab74",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/597c12ed286fb9d1701a36684ce6e0cbe28ebc8b",
+                "reference": "597c12ed286fb9d1701a36684ce6e0cbe28ebc8b",
                 "shasum": ""
             },
             "require": {
@@ -945,7 +945,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.27.1"
+                "source": "https://github.com/twigphp/Twig/tree/v3.28.0"
             },
             "funding": [
                 {
@@ -957,7 +957,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-30T17:09:26+00:00"
+            "time": "2026-07-03T20:44:34+00:00"
         }
     ],
     "packages-dev": [],
