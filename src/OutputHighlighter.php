@@ -13,7 +13,7 @@ use Tempest\Highlight\Highlighter;
  * Wraps a single tempest/highlight Highlighter (RON support added via
  * mbolli/tempest-highlight-ron; JSON ships with tempest). parse() returns escaped
  * inner HTML — `<span class="hl-...">` tokens with all text content HTML-escaped —
- * so the result is safe to drop into the output `<pre>` with Twig's `|raw`. The
+ * so the output template prints it into the `<pre>` unescaped. The
  * instance is reused across requests (the app is a long-running OpenSwoole process).
  */
 final class OutputHighlighter {

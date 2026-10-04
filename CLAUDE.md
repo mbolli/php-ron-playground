@@ -11,17 +11,18 @@ to be embedded by `<iframe>` into the php-ron marketing page, and to also work s
 ## Commands
 
 ```bash
-composer install   # resolves php-via/php-ron/tempest-highlight-ron, then runs bin/copy-assets.php
+composer install   # resolves php-via (../php-via-014 for now), php-ron and tempest-highlight-ron
 php app.php        # run the server → http://localhost:3000  (alias: composer start)
 ```
 
-Requires **PHP 8.4+** with the **OpenSwoole** extension. There is no test suite, linter, or static
+Requires **PHP 8.4+** with **OpenSwoole 26**. There is no test suite, linter, or static
 analysis configured in this repo — do not invent `phpunit`/`phpstan` commands (the entries you may
 see in `composer.lock` belong to the php-via dependency, not this project).
 
-All dependencies resolve from Packagist as stable releases (`mbolli/php-via` is pinned to `^0.10.0`).
-To develop against local checkouts of the libraries, add a `path` repository for them in
-`composer.json`. `OutputHighlighter`/`Highlighter` are long-lived because the OpenSwoole process is
+php-via 0.14 is unreleased: `composer.json` requires `mbolli/php-via: @dev` from a `path` repository
+at `../php-via-014`. After the release, require `^0.14` and delete the repository entry. The app uses no
+template engine: `src/Template.php` renders plain PHP templates.
+`OutputHighlighter`/`Highlighter` are long-lived because the OpenSwoole process is
 long-running — restart `php app.php` to pick up code changes.
 
 ## Architecture (CQRS over one SSE stream)
@@ -33,17 +34,17 @@ carries every update. The flow on each keystroke:
    bound signals (`input`, `mode`, `pretty`) to the **`convert` action** — the command.
 2. The `convert` action does nothing but call `$ctx->sync()`. Signal values arrive with the POST, so
    state is already current.
-3. `sync()` re-runs the **callable view**, which calls `Converter::convert(...)`, highlights the
-   result, and re-renders **only the `output` block** of `playground.html.twig`, patched down the
-   existing SSE stream. `cacheUpdates: false` because every input is unique.
+3. `sync()` re-runs the **view** with `$isUpdate = true`, which calls `Converter::convert(...)`,
+   highlights the result and returns **only `templates/output.php`** (`#pg-out`), patched down the
+   existing SSE stream. The page load renders `templates/playground.php` around it.
 
-Read side = the SSE stream + callable view; command side = the `convert` action. OpenSwoole holds
+Read side = the SSE stream + view; command side = the `convert` action. OpenSwoole holds
 per-tab state in-process — no manual SSE plumbing, no Redis.
 
 ### Files
 
 - `app.php` — bootstrap, `Config`, the single `/` page: declares signals, the `convert` action, and
-  the callable view. Signals are **TAB-scoped** (each visitor's editor is private to their tab).
+  the view. Signals are **TAB-scoped** (each visitor's editor is private to their tab).
 - `src/Converter.php` — framework-free JSON ⇄ RON conversion + stats (bytes saved, SHA-256 hash).
   Depends only on `mbolli/php-ron` so it's testable in isolation. Caps input at `MAX_BYTES` (64 KB)
   and turns any thrown `RonException`/`Throwable` into a short `error` string. Stats/hash are
@@ -53,22 +54,23 @@ per-tab state in-process — no manual SSE plumbing, no Redis.
   `RonMode::Canonical`, is what sorts keys, and it is used only for the stats/hash pass via
   `Ron::canonicalJson()` / `Ron::canonicalRon()` / `Ron::canonicalHash()`.
 - `src/OutputHighlighter.php` — server-side syntax highlighting via `tempest/highlight` (RON support
-  from `mbolli/tempest-highlight-ron`). `parse()` returns HTML-escaped token spans, safe to emit with
-  Twig `|raw`.
-- `templates/playground.html.twig` — the UI. Only `{% block output %}` re-renders live; the rest is
-  the static shell rendered once.
-- `templates/shell.html` — custom php-via shell: the connection `<meta>` tags (do not remove — they
-  seed `via_ctx`, open the SSE stream, and close the context on unload) plus the iframe
+  from `mbolli/tempest-highlight-ron`). `parse()` returns HTML-escaped token spans, which `output.php`
+  prints unescaped.
+- `src/Template.php`: renders `templates/<name>.php` with the data as variables and `$e()` for
+  escaping. Escape everything except `outputHtml`.
+- `templates/playground.php`: the page, rendered once. `templates/output.php`: the output pane, the
+  only part that re-renders live.
+- `templates/shell.html` — custom php-via shell: `{{ via_head }}` right after `<meta charset>` and
+  `{{ via_foot }}` before `</body>` (do not remove: they seed `via_ctx`, open the SSE stream, close
+  the context on unload and load php-via's own `/datastar.js`) plus the iframe
   **height-handshake** script that `postMessage`s content height to the embedding parent.
-- `bin/copy-assets.php` — copies php-via's bundled `datastar.js` into `public/` on composer
-  install/update. The copied file is git-ignored.
 
 ### Two gotchas in `app.php` / templates
 
-- **`modeSignalId`**: TAB signals get a DOM id of `<name>_<contextId>`, not just `mode`. The view
-  exposes `$result['modeSignalId']` under that distinct key because `$result['mode']` (a plain string)
-  shadows the `mode` signal in auto-injected template data, making `{{ mode.id }}` unavailable.
-  Templates reference the signal as `${{ modeSignalId }}`.
+- **Signal ids**: templates write `$signal->ref()` / `$signal->id()`. Never hard-code a signal id:
+  TAB ids carry the context id.
+- **Arrow functions** capture only the names they reference, so the view passes its data as an
+  explicit array, not `compact()`.
 - **Output highlighting** (`toRon`): selects the language of the *output*, not the input — RON when
   converting JSON→RON, JSON when converting RON→JSON.
 

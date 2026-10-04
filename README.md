@@ -12,26 +12,26 @@ standalone.
 
 php-via opens a single persistent SSE stream per client (`/_sse`) that carries every update.
 Each keystroke POSTs the bound signals to the `convert` **action** (the command); the action
-calls `$c->sync()`, and the callable **view** re-renders only the `output` block with the freshly
+calls `$c->sync()`, and the **view** re-renders only the output pane with the freshly
 converted RON/JSON, patched down the existing SSE stream. Read stream + command actions, with
 OpenSwoole holding state in-process — no manual SSE plumbing or Redis.
 
-- `app.php` — bootstrap + the single page (signals `input`/`mode`/`pretty`, the `convert` action, the callable view).
+- `app.php` — bootstrap + the single page (signals `input`/`mode`/`pretty`, the `convert` action, the view).
 - `src/Converter.php` — framework-free JSON ⇄ RON conversion + stats (bytes saved, SHA-256 hash). Caps input at 64 KB and catches `RonException`.
-- `templates/shell.html` — custom php-via shell: the connection metas, the embedded layout, and the iframe **height-handshake** script.
-- `templates/playground.html.twig` — the UI; the `{% block output %}` is what re-renders live.
+- `templates/shell.html` — custom php-via shell: `{{ via_head }}` and `{{ via_foot }}` connect the page, plus the embedded layout and the iframe **height-handshake** script.
+- `templates/playground.php`, `templates/output.php`: the UI as plain PHP templates; `output.php` is what re-renders live.
 - `public/playground.css` — standalone styling (modern CSS, light/dark via `prefers-color-scheme`).
 
 ## Local development
 
 ```bash
-composer install      # resolves php-via + php-ron + tempest-highlight-ron from Packagist,
-                      # and copies datastar.js into public/ (post-install hook)
+composer install      # php-via 0.14 from ../php-via-014 until it is released, the rest from Packagist
 php app.php           # → http://localhost:3000
 ```
 
-Requires PHP 8.4+ with the OpenSwoole extension (same as php-via). All dependencies resolve from
-Packagist as stable releases. To develop against local checkouts of the libraries, add a `path`
+Requires PHP 8.4+ with OpenSwoole 26 (same as php-via). php-via 0.14 is unreleased, so
+`composer.json` points a `path` repository at `../php-via-014`; once it is released, require
+`^0.14` and delete the repository entry. To develop against local checkouts of the other libraries, add a `path`
 repository for them in `composer.json`.
 
 ## Configuration (env)
@@ -63,7 +63,7 @@ The live instance runs at `https://play-ron.zweiundeins.gmbh`. The two unit/prox
 # on the server, as root
 git clone https://github.com/mbolli/php-ron-playground /opt/php-ron-playground
 cd /opt/php-ron-playground
-php /opt/composer.phar install --no-dev --optimize-autoloader   # runs copy-assets (datastar.js)
+php /opt/composer.phar install --no-dev --optimize-autoloader
 chown -R www-data:www-data /opt/php-ron-playground
 
 cp deploy/play-ron.service /etc/systemd/system/
