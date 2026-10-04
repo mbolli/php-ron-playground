@@ -25,13 +25,11 @@ OpenSwoole holding state in-process — no manual SSE plumbing or Redis.
 ## Local development
 
 ```bash
-composer install      # php-via 0.14 from ../php-via-014 until it is released, the rest from Packagist
+composer install      # php-via, php-ron and tempest-highlight-ron from Packagist
 php app.php           # → http://localhost:3000
 ```
 
-Requires PHP 8.4+ with OpenSwoole 26 (same as php-via). php-via 0.14 is unreleased, so
-`composer.json` points a `path` repository at `../php-via-014`; once it is released, require
-`^0.14` and delete the repository entry. To develop against local checkouts of the other libraries, add a `path`
+Requires PHP 8.4+ with OpenSwoole 26 (same as php-via 0.14). To develop against local checkouts of the libraries, add a `path`
 repository for them in `composer.json`.
 
 ## Configuration (env)

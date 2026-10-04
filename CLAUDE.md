@@ -11,7 +11,7 @@ to be embedded by `<iframe>` into the php-ron marketing page, and to also work s
 ## Commands
 
 ```bash
-composer install   # resolves php-via (../php-via-014 for now), php-ron and tempest-highlight-ron
+composer install   # resolves php-via, php-ron and tempest-highlight-ron from Packagist
 php app.php        # run the server → http://localhost:3000  (alias: composer start)
 ```
 
@@ -19,8 +19,8 @@ Requires **PHP 8.4+** with **OpenSwoole 26**. There is no test suite, linter, or
 analysis configured in this repo — do not invent `phpunit`/`phpstan` commands (the entries you may
 see in `composer.lock` belong to the php-via dependency, not this project).
 
-php-via 0.14 is unreleased: `composer.json` requires `mbolli/php-via: @dev` from a `path` repository
-at `../php-via-014`. After the release, require `^0.14` and delete the repository entry. The app uses no
+All dependencies resolve from Packagist (`mbolli/php-via` `^0.14`). To develop against local checkouts
+of the libraries, add a `path` repository for them in `composer.json`. The app uses no
 template engine: `src/Template.php` renders plain PHP templates.
 `OutputHighlighter`/`Highlighter` are long-lived because the OpenSwoole process is
 long-running — restart `php app.php` to pick up code changes.
