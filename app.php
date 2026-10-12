@@ -30,7 +30,8 @@ $port = (int) (getenv('VIA_PORT') ?: 3000);
 $publicOrigin = trim((string) getenv('VIA_PUBLIC_ORIGIN'));
 
 $config = (new Config())
-    ->withHost('0.0.0.0')
+    // VIA_HOST=127.0.0.1 behind a reverse proxy, so the port is not public.
+    ->withHost(getenv('VIA_HOST') ?: '0.0.0.0')
     ->withPort($port)
     ->withDevMode($isDev)
     ->withStaticDir(__DIR__ . '/public')
