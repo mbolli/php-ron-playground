@@ -1,0 +1,31 @@
+# Moved from Servitro (5.231.56.71) on 2026-10-12. Proxies to the app on loopback :7101.
+play-ron.zweiundeins.gmbh {
+	encode {
+		gzip 6
+	}
+
+	reverse_proxy 127.0.0.1:7101 {
+		transport http {
+			versions h2c
+			read_timeout 0s
+			write_timeout 0s
+			dial_timeout 3s
+		}
+	}
+	header {
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+		Content-Security-Policy "frame-ancestors 'self' https://zweiundeins.gmbh https://mbolli.github.io http://localhost https://localhost"
+		Cross-Origin-Resource-Policy "cross-origin"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+	log {
+		output file /var/log/caddy/play-ron-access.log {
+			mode 0640
+			roll_size 100mb
+			roll_keep 5
+			roll_keep_for 720h
+		}
+		format json
+	}
+}

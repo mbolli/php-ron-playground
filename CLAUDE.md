@@ -79,8 +79,9 @@ per-tab state in-process — no manual SSE plumbing, no Redis.
 - `app.php` switches on `APP_ENV` (`prod` enables secure cookie, h2c, Brotli, `withEmbeddable()`).
 - Env: `VIA_PORT` (3000), `VIA_PUBLIC_ORIGIN` (allowlists action POST Origin — CSRF defence),
   `VIA_EMBED_ORIGIN` (who may frame us — sets `frame-ancestors`). Per-IP action rate limit is 180/min.
-- The runtime is the OpenSwoole process behind a TLS-terminating reverse proxy speaking h2c. There is
-  no Dockerfile/proxy config in the repo yet — the deployment setup is done interactively later.
+- The runtime is the OpenSwoole process behind a TLS-terminating reverse proxy speaking h2c. `deploy/`
+  has the unit, the Caddy block and the shared host's drop-ins, which `deploy/setup-host.sh` installs
+  (README "Deploy").
 
 ### Cross-site cookie caveat (relevant if changing embedding behaviour)
 

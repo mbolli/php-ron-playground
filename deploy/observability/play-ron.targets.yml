@@ -1,0 +1,4 @@
+# Blackbox probes for play-ron, installed as /etc/prometheus/targets/play-ron.yml.
+# `module` picks the blackbox module; see the host's /etc/prometheus/blackbox.yml.
+- targets: ['https://play-ron.zweiundeins.gmbh/']
+  labels: { service: play-ron, module: http_2xx_play-ron }

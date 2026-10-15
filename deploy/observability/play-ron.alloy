@@ -1,0 +1,16 @@
+// play-ron: its Caddy access log, through the host's caddy_logs pipeline (config.alloy).
+// Installed as /etc/alloy/play-ron.alloy by deploy/setup-host.sh.
+
+local.file_match "play_ron_access" {
+	path_targets = [
+		{"__path__" = "/var/log/caddy/play-ron-access.log", "job" = "caddy", "site" = "play-ron"},
+	]
+}
+
+loki.source.file "play_ron_access" {
+	targets    = local.file_match.play_ron_access.targets
+	forward_to = [loki.process.caddy_logs.receiver]
+	// A newly added log starts at its end: Loki rejects lines older than a week,
+	// and referrer-rollup.py --files covers the history instead.
+	tail_from_end = true
+}

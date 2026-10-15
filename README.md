@@ -48,14 +48,24 @@ TLS and reverse-proxies to it via h2c. In prod (`APP_ENV=prod`) the app speaks h
 Brotli, and marks the session cookie `Secure` + embeddable. Per-IP action rate limiting (180/min) is
 on by default.
 
-The live instance runs at `https://play-ron.zweiundeins.gmbh`. The two unit/proxy files are in
-[`deploy/`](deploy/):
+The live instance runs at `https://play-ron.zweiundeins.gmbh`, on a shared host whose Caddy,
+Prometheus and Alloy each load a folder of files that the apps install (lith's guide
+[Metrics and monitoring](https://lith.zweiundeins.gmbh/docs/guides/monitoring#drop-in-files-for-a-shared-host)
+has the folders and the labels). The files are in [`deploy/`](deploy/):
 
 - [`deploy/play-ron.service`](deploy/play-ron.service) → `/etc/systemd/system/`. Runs as `www-data`
-  with `APP_ENV=prod`, `VIA_PORT=3001`, `VIA_PUBLIC_ORIGIN=https://play-ron.zweiundeins.gmbh`.
-- [`deploy/play-ron.caddyfile`](deploy/play-ron.caddyfile) → `/etc/caddy/` (a host whose main
-  Caddyfile does `import ./*.caddyfile`). Proxies `127.0.0.1:3001` over h2c and sets the
-  `frame-ancestors` / HSTS headers.
+  with `APP_ENV=prod`, `VIA_PORT=7101`, `VIA_PUBLIC_ORIGIN=https://play-ron.zweiundeins.gmbh`.
+- [`deploy/systemd/play-ron.service.d/listen.conf`](deploy/systemd/play-ron.service.d/listen.conf) →
+  `/etc/systemd/system/play-ron.service.d/`: `VIA_HOST=127.0.0.1`, so the port stays on loopback.
+- [`deploy/play-ron.caddy`](deploy/play-ron.caddy) → `/etc/caddy/sites/`, which the host's Caddyfile
+  imports. Proxies `127.0.0.1:7101` over h2c, sets the `frame-ancestors` / HSTS headers and writes
+  its JSON access log to `/var/log/caddy/play-ron-access.log`.
+- [`deploy/observability/play-ron.targets.yml`](deploy/observability/play-ron.targets.yml) →
+  `/etc/prometheus/targets/play-ron.yml`: a blackbox probe of `/` (`http_2xx_play-ron`, which wants
+  "RON playground" in the body). Prometheus watches the folder.
+- [`deploy/observability/play-ron.alloy`](deploy/observability/play-ron.alloy) →
+  `/etc/alloy/play-ron.alloy`: Caddy's access log as `{job="caddy", site="play-ron"}`, through the
+  host's pipeline for access logs.
 
 ```bash
 # on the server, as root
@@ -65,12 +75,20 @@ php /opt/composer.phar install --no-dev --optimize-autoloader
 chown -R www-data:www-data /opt/php-ron-playground
 
 cp deploy/play-ron.service /etc/systemd/system/
-systemctl daemon-reload && systemctl enable --now play-ron      # OpenSwoole on :3001
+bash deploy/setup-host.sh                                       # listen.conf, probe, Alloy file
+systemctl daemon-reload && systemctl enable --now play-ron      # OpenSwoole on 127.0.0.1:7101
 
-cp deploy/play-ron.caddyfile /etc/caddy/
-touch /var/log/caddy/play-ron.log && chown caddy:caddy /var/log/caddy/play-ron.log  # else reload fails
+install -m 0644 deploy/play-ron.caddy /etc/caddy/sites/
+runuser -u caddy -- env HOME=/var/lib/caddy caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
 systemctl reload caddy
 ```
+
+`deploy/setup-host.sh` installs the unit's drop-in with a `daemon-reload` (it never restarts
+`play-ron`: restart it to apply a changed one), then the probe and the Alloy file, each only where
+its service is installed. It reloads Alloy and puts the old file back if Alloy refuses the new one.
+Run it again after changing them. The Caddy block goes in by hand, since Caddy asks for the
+certificate as it loads it. Validate as Caddy's user: `caddy validate`, run as root, creates the log
+file owned by root, and the reload then fails.
 
 Update an existing deploy with `git pull && php /opt/composer.phar install --no-dev && systemctl restart play-ron`.
 
@@ -82,7 +100,7 @@ Update an existing deploy with `git pull && php /opt/composer.phar install --no-
    reveals the iframe only once its height-handshake confirms it loaded, and stays on the static
    comparison otherwise.
 3. Allow the marketing page origin in `frame-ancestors`. In this deploy that lives in
-   [`deploy/play-ron.caddyfile`](deploy/play-ron.caddyfile) (already includes `https://mbolli.github.io`
+   [`deploy/play-ron.caddy`](deploy/play-ron.caddy) (already includes `https://mbolli.github.io`
    and `https://zweiundeins.gmbh`); alternatively the app can emit it via `VIA_EMBED_ORIGIN`, but set
    it in only one place to avoid two `Content-Security-Policy` headers. `VIA_PUBLIC_ORIGIN` stays this
    service's own origin.
