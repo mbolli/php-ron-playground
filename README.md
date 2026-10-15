@@ -123,3 +123,7 @@ comparison.
 
 [php-ron](https://github.com/mbolli/php-ron) · [php-via](https://via.zweiundeins.gmbh) ·
 [Datastar](https://data-star.dev) · [OpenSwoole](https://openswoole.com). MIT.
+
+## Maintainer
+
+Maintained by [Michael Bolli](https://github.com/mbolli) at [zwei und eins gmbh](https://zweiundeins.gmbh), Aarberg, Switzerland.
