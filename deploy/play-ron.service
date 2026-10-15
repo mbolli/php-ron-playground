@@ -9,7 +9,7 @@ Group=www-data
 WorkingDirectory=/opt/php-ron-playground
 Environment="XDEBUG_MODE=off"
 Environment="APP_ENV=prod"
-Environment="VIA_PORT=3001"
+Environment="VIA_PORT=7101"
 Environment="VIA_PUBLIC_ORIGIN=https://play-ron.zweiundeins.gmbh"
 ExecStart=/usr/bin/php /opt/php-ron-playground/app.php
 Restart=always
